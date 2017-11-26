@@ -6,12 +6,12 @@ import numpy as np
 SNAKE_SIZE = 7
 
 def generate_random_grid():
-    size = np.random.randint(10, 101)
+    size = np.random.randint(10, 100)
     grid = np.zeros((size,size), np.int32)
     for i in range(grid.shape[0]):
         for j in range(grid.shape[1]):
             grid[i,j] = np.random.randint(1, 257)
-    t1 = time.time()
+    np.savetxt('random.csv', grid, fmt='%d',  delimiter=';')
     return grid
 
 def load_grid():
@@ -21,8 +21,9 @@ def load_grid():
             delimiter = sys.argv[2]
         else:
             delimiter = ';'
-        reader = csv.reader(open(input_file, "r"), delimiter=delimiter)
-        l = list(reader)
+        with open(input_file, 'r') as f:
+            reader = csv.reader(f, delimiter=delimiter)
+            l = list(reader)
         return np.array(l).astype("int")
     else:
         return generate_random_grid()
@@ -98,26 +99,31 @@ def search_snakes(grid, snakes, shapes):
                 if value > 0:
                     match = get_matching_snake(snakes, snake, value)
                     if match != None:
-                        return match, snake, value
-    return 'Fail'
+                        return [match, snake]
+    return []
+
+def adjust_indices(snake):
+    return [(x+1, y+1) for x, y in snake]
 
 
 
-shapes = []
-shape = [(0, 0)]
-shapes = get_shapes(shape, shapes, SNAKE_SIZE)
-snakes = dict()
+shapes = get_shapes([(0, 0)], [], SNAKE_SIZE)
 grid = load_grid()
+snakes = dict()
+result = search_snakes(grid, snakes, shapes)
+with open('output.txt', 'w') as f:
+    if len(result) == 0:
+        #print('Fail')
+        f.write('Fail')
+    else:
+        f.write(str(adjust_indices(result[0])))
+        f.write('\n')
+        f.write(str(adjust_indices(result[1])))
+        #print(adjust_indices(result[0]))
+        #print(adjust_indices(result[1]))
 
-print(search_snakes(grid, snakes, shapes))
-t1 = time.time()
-#print(t1-t0)
- 
-#print(get_shapes(shape, shapes, n))
 
-print(grid)
-#print(grid[0,1])
-
+#print(grid)
 
 
 
