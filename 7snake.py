@@ -1,5 +1,4 @@
 import sys
-import time
 import csv
 import numpy as np
 
@@ -90,7 +89,7 @@ def get_matching_snake(snakes, new_snake, value):
     return None
 
 def search_snakes(grid):
-    """Search through the grid for two snakes with the same sum of the cell's values, 
+    """Search through the grid for two snakes with the same sum of the cell's values
        using the pre-generated shapes
     """
     snakes = dict()
