@@ -32,12 +32,15 @@ def load_grid():
 def get_shapes(shape, shapes, n):
     """Generate all possible snake shape respecting the problem specification"""
     if len(shape)==7:
+        #apply an offset if there is any negative coordinate
         minx = min(shape, key=lambda x: x[0])[0]
         if minx<0:
             shape = [(x-minx, y) for x, y in shape]
         miny = min(shape, key=lambda x: x[1])[1]
         if miny<0:
             shape = [(x, y-miny) for x, y in shape]
+
+        #sort the coords so the same shape found through different paths will be ignored
         shape.sort()
         if shape not in shapes:
             shapes.append(shape)
