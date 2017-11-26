@@ -6,6 +6,7 @@ import numpy as np
 SNAKE_SIZE = 7
 
 def generate_random_grid():
+    """Generate a random grid if none if passed in the command line"""
     size = np.random.randint(10, 100)
     grid = np.zeros((size,size), np.int32)
     for i in range(grid.shape[0]):
@@ -15,6 +16,7 @@ def generate_random_grid():
     return grid
 
 def load_grid():
+    """Load the grid from the file passed in the command line"""
     if len(sys.argv) > 1:
         input_file = sys.argv[1]
         if len(sys.argv) > 2:
@@ -29,6 +31,7 @@ def load_grid():
         return generate_random_grid()
 
 def get_shapes(shape, shapes, n):
+    """Generate all possible snake shape respecting the problem specification"""
     if len(shape)==7:
         minx = min(shape, key=lambda x: x[0])[0]
         if minx<0:
@@ -68,12 +71,14 @@ def get_shapes(shape, shapes, n):
     return shapes
 
 def share_cells(a, b):
+    "Check whether two snakes share any cell"""
     for cell in a:
         if cell in b:
             return True
     return False
 
 def get_matching_snake(snakes, new_snake, value):
+    """Given one snake, find one with the same sum of cell's values"""
     if value not in snakes.keys():
         snakes[value] = [new_snake]
         return None
@@ -84,7 +89,12 @@ def get_matching_snake(snakes, new_snake, value):
         snakes[value].append(new_snake)
     return None
 
-def search_snakes(grid, snakes, shapes):
+def search_snakes(grid):
+    """Search through the grid for two snakes with the same sum of the cell's values, 
+       using the pre-generated shapes
+    """
+    snakes = dict()
+    shapes = get_shapes([(0, 0)], [], SNAKE_SIZE)
     for i in range(grid.shape[0]):
         for j in range(grid.shape[1]):
             for shape in shapes:
@@ -103,30 +113,18 @@ def search_snakes(grid, snakes, shapes):
     return []
 
 def adjust_indices(snake):
+    """Adjust the indices to start from 1 instead of 0"""
     return [(x+1, y+1) for x, y in snake]
 
-
-
-shapes = get_shapes([(0, 0)], [], SNAKE_SIZE)
 grid = load_grid()
-snakes = dict()
 result = search_snakes(grid, snakes, shapes)
 with open('output.txt', 'w') as f:
     if len(result) == 0:
-        #print('Fail')
         f.write('Fail')
     else:
         f.write(str(adjust_indices(result[0])))
         f.write('\n')
         f.write(str(adjust_indices(result[1])))
-        #print(adjust_indices(result[0]))
-        #print(adjust_indices(result[1]))
-
-
-#print(grid)
-
-
-
 
 
 
