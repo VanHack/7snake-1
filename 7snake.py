@@ -117,7 +117,7 @@ def adjust_indices(snake):
     return [(x+1, y+1) for x, y in snake]
 
 grid = load_grid()
-result = search_snakes(grid, snakes, shapes)
+result = search_snakes(grid)
 with open('output.txt', 'w') as f:
     if len(result) == 0:
         f.write('Fail')
