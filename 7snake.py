@@ -48,7 +48,7 @@ def get_shapes(shape, shapes, n):
            and (x+1, y+1) not in shape \
            and (x+1, y-1) not in shape:
             new_shape = shape + [(x+1, y)]
-            shapes = get_shapes(new_shape, shapes, n) 
+            shapes = get_shapes(new_shape, shapes, n)
         if     (x,   y+1) not in shape \
            and (x,   y+2) not in shape \
            and (x+1, y+1) not in shape \
